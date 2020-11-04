@@ -1,5 +1,7 @@
+"""
 def convert_binary():
     return
+"""
 
 
 def length_tracker():
@@ -10,8 +12,10 @@ def forward_check():
     return
 
 
+"""
 def backward_check():
     return
+"""
 
 
 def arc_consistency():
