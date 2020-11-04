@@ -18,12 +18,15 @@ def print_board(board):
 
 
 def find_empty(board):
+    empty = []
     for i in range(len(board)):  # row
         for j in range(len(board[0])):  # col
             num = int(board[i][j])
             if num == 0:
-                return (i, j)  
-    return None
+                position = [i, j]
+                empty.append(position)
+                # return (i, j)  
+    return empty
 
 
 board = []
@@ -43,11 +46,11 @@ with open(filepath) as fp:
 print_board(board)
 print()
 empty = find_empty(board)
-print("First empty:", empty)
-
+print("Empty spaces:")
+for i in empty: 
+    print(*i)
 
     
-
     # ...
 
     # print output
