@@ -10,45 +10,24 @@ def depth_limited_search():
     return
 
 
-def Inference(assignment, inferences, csp, var, val):
-    inferences[var] = val
-
-    for neighbor in csp.neighbors[var]:
-        if neighbor not in assignment and val in csp.domain[neighbor]:
-            if len(csp.domain[neighbor]) == 1:
-                return "Fail"
-
-            remaining = csp.domain[neighbor] = csp.domain[neighbor].replace(
-                val, "")
-
-            if len(remaining) == 1:
-                flag = Inference(assignment, inferences,
-                                 csp, neighbor, remaining)
-
-                if flag == "Fail":
-                    return "Fail"
-
-    return inferences
-
-
-def backward_track(asmt, csp):
+def backward_track(asmt):
     # might need change
-    if set(asmt.keys()) == set(csp.variable):
+    if set(asmt.keys()) == set(c.variable):
         return asmt
-    var = c.select_unsigned_var(asmt, csp)
-    domain = copy.deepcopy(csp.domain)
-    for v in csp.domain[var]:
-        if csp.consistent(asmt, var, v):
+    var = c.select_unsigned_var(asmt, c)
+    domain = copy.deepcopy(c.domain)
+    for v in c.domain[var]:
+        if c.consistent(asmt, var, v):
         asmt[var] = v
         inferences = {}
-        inferences = Inference(asmt, inferences, csp, var, val)
+        inferences = c.inference(asmt, inferences, c, var, val)
 
         if inferences != "Fail":
-            result = backward_track(asmt, csp)
+            result = backward_track(asmt, c)
 
             if result != "Fail":
                 return result
 
-        csp.domain.update(domain)
+        c.domain.update(domain)
 
     return "Fail"

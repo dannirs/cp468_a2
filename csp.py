@@ -82,3 +82,28 @@ class CSP:
         for y in csp.domain[Xj]:
             if Xj in csp.neighbors[Xi] and y != x:
                 return True
+
+    def select_unsigned_var(assignment, csp):
+        unassigned_vars = dict((cell, len(
+            csp.domain[cell])) for cell in csp.domain if cell not in assignment.keys())
+        return min(unassigned_vars, key=unassigned_vars.get)
+
+    def inference(assignment, inferences, csp, var, val):
+        inferences[var] = val
+
+        for neighbor in csp.neighbors[var]:
+            if neighbor not in assignment and val in csp.domain[neighbor]:
+                if len(csp.domain[neighbor]) == 1:
+                    return "Fail"
+
+                remaining = csp.domain[neighbor] = csp.domain[neighbor].replace(
+                    val, "")
+
+                if len(remaining) == 1:
+                    flag = Inference(assignment, inferences,
+                                     csp, neighbor, remaining)
+
+                    if flag == "Fail":
+                        return "Fail"
+
+        return inferences
