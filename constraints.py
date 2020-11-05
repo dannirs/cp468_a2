@@ -29,7 +29,7 @@ class Constraints:
         vals = []
         for s in self.scope:
             # needs to improve to check if it is not assigned
-            if not s:
+            if not s.assign():
                 n = n + 1
                 vals.append(s)
         return n, vals
