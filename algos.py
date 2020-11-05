@@ -2,6 +2,8 @@ import queue
 import sys
 import copy
 from Constraints import *
+import csp as c
+from csp import *
 
 
 def depth_limited_search():
@@ -33,7 +35,7 @@ def backward_track(asmt, csp):
     # might need change
     if set(asmt.keys()) == set(csp.variable):
         return asmt
-    var = select_unsigned_var(asmt, csp)
+    var = c.select_unsigned_var(asmt, csp)
     domain = copy.deepcopy(csp.domain)
     for v in csp.domain[var]:
         if csp.consistent(asmt, var, v):

@@ -1,8 +1,21 @@
+import copy
+import sys
+import queue
+NUMS = "123456789"
+
+
+class Variables:
+    def __init__(self, row, col, value):
+        self.row = row
+        self. col = col
+        self value = value
+
+
 class CSP:
     def __init__(self, filename):
         self.variables = [r + c for r in 'ABCDEFGHI' for c in '123456789']
         self.domain = dict(
-            (self.variables[i], fullDomain if inp[i] == '0' else inp[i]) for i in range(len(inp)))
+            (self.variables[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(inp)))
         a = [self.colNeighbors(self.variables, i) for i in range(9)]
         b = [self.rowNeighbors(self.variables, i) for i in range(9)]
         c = [self.blockNeighbors(self.variables, i, j)
@@ -16,7 +29,7 @@ class CSP:
         def colNeighbors(self, b, col):
             neighbors = []
             for i in range(col, len(b), 9):
-            neighbors.append(b[i])
+                neighbors.append(b[i])
 
             return neighbors
 
@@ -39,3 +52,33 @@ class CSP:
                 neighbors.append(v)
 
         return neighbors
+
+    def solved(self):
+        for v in self.variables:
+            if len(self.domain[v]) > 1:
+                return False
+
+        return True
+
+    def consistent(self, assignment, var, val):
+        for neighbor in self.neighbors[var]:
+            if neighbor in assignment.keys() and assignment[neighbor] == val:
+                return False
+
+        return True
+
+    def Revise(csp, Xi, Xj):
+        revised = False
+        values = set(csp.domain[Xi])
+
+        for x in values:
+            if not isConsistent(csp, x, Xi, Xj):
+                csp.domain[Xi] = csp.domain[Xi].replace(x, '')
+                revised = True
+
+        return revised
+
+    def isConsistent(csp, x, Xi, Xj):
+        for y in csp.domain[Xj]:
+            if Xj in csp.neighbors[Xi] and y != x:
+                return True
