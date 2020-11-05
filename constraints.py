@@ -36,7 +36,7 @@ class Constraints:
 
     def check_tuple_vaild(self, t):
         check = False
-        for x, val in enumerate(self, scope):
+        for x, val in enumerate(self.scope):
             # need to improve
             if val:
                 check = True
