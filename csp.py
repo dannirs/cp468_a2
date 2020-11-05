@@ -14,3 +14,30 @@ class CSP:
             (s, set(sum(self.cellNeighbors[s], [])) - set([s])) for s in self.variables)
         self.constraints = {(variable, neighbor)
                             for variable in self.variables for neighbor in self.neighbors[variable]}
+
+        def colNeighbors(self, b, col):
+            neighbors = []
+        for i in range(col, len(b), 9):
+            neighbors.append(b[i])
+
+        return neighbors
+
+    def rowNeighbors(self, b, row):
+        neighbors = []
+        end = (row + 1) * 9
+        start = end - 9
+        for i in range(start, end, 1):
+            neighbors.append(b[i])
+
+        return neighbors
+
+    def blockNeighbors(self, b, row, col):
+        neighbors = []
+        domRow = row - row % 3
+        domCol = col - col % 3
+        for j in range(3):
+            for i in range(3):
+                v = b[(j + domCol) + (i + domRow) * 9]
+                neighbors.append(v)
+
+        return neighbors
