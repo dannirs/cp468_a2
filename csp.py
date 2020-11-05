@@ -12,15 +12,13 @@ class CSP:
             (s, [u for u in self.cells if s in u]) for s in self.variables)
         self.neighbors = dict(
             (s, set(sum(self.cellNeighbors[s], [])) - set([s])) for s in self.variables)
-        self.constraints = {(variable, neighbor)
-                            for variable in self.variables for neighbor in self.neighbors[variable]}
 
         def colNeighbors(self, b, col):
             neighbors = []
-        for i in range(col, len(b), 9):
+            for i in range(col, len(b), 9):
             neighbors.append(b[i])
 
-        return neighbors
+            return neighbors
 
     def rowNeighbors(self, b, row):
         neighbors = []
