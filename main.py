@@ -1,7 +1,5 @@
-def main():
-    
-    
-# get input from text file
+
+
 def print_board(board):
     for i in range(len(board)):
         if i % 3 == 0 and i != 0:
@@ -25,35 +23,31 @@ def find_empty(board):
             if num == 0:
                 position = [i, j]
                 empty.append(position)
-                # return (i, j)  
+                # return (i, j)
     return empty
 
 
-board = []
+def main():
+    board = []
 
-filepath = 'sudoku_input.txt'
-with open(filepath) as fp:
-    line = fp.readline()
-    while line:
-        values = line.split(' ')
-        values.pop()
-        board.append(values)
+    filepath = 'test.txt'
+    with open(filepath) as fp:
         line = fp.readline()
-        
-# for x in board:
-#    print(*x)
+        while line:
+            values = line.split(' ')
+            values.pop()
+            board.append(values)
+            line = fp.readline()
 
-print_board(board)
-print()
-empty = find_empty(board)
-print("Empty spaces:")
-for i in empty: 
-    print(*i)
+    # for x in board:
+    #    print(*x)
 
-    
-    # ...
-
-    # print output
+    print_board(board)
+    print()
+    empty = find_empty(board)
+    print("Empty spaces:")
+    for i in empty:
+        print(*i)
 
 
 if "__name__" == "__main__":
