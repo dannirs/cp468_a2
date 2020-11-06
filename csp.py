@@ -62,12 +62,12 @@ class CSP:
         self.neighbors = dict(
             (s, set(sum(self.cellNeighbors[s], [])) - set([s])) for s in self.variables)
 
-        def colNeighbors(self, b, col):
-            neighbors = []
-            for i in range(col, len(b), 9):
-                neighbors.append(b[i])
+    def colNeighbors(self, b, col):
+        neighbors = []
+        for i in range(col, len(b), 9):
+            neighbors.append(b[i])
 
-            return neighbors
+        return neighbors
 
     def rowNeighbors(self, b, row):
         neighbors = []
