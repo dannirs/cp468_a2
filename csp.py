@@ -10,6 +10,7 @@ class Variables:
         self. col = col
         self.value = value
         self.assigned_value = None
+        self.cur_dom = [True] * len(CSP.domain)
 
     def is_assigned(self):
         return self.assignedValue != None
@@ -40,7 +41,7 @@ class Variables:
         if self.is_assigned():
             return value == self.get_assigned_value()
         else:
-            return self.curdom[self.value_index(value)]
+            return self.cur_dom[self.value_index(value)]
 
     def value_index(value):
         return CSP.domain.index(value)
@@ -50,7 +51,7 @@ class CSP:
     def __init__(self, filename):
         self.variables = [r + c for r in 'ABCDEFGHI' for c in '123456789']
         self.domain = dict(
-            (self.variables[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(inp)))
+            (self.variables[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(filename)))
         a = [self.colNeighbors(self.variables, i) for i in range(9)]
         b = [self.rowNeighbors(self.variables, i) for i in range(9)]
         c = [self.blockNeighbors(self.variables, i, j)
