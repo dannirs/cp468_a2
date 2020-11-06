@@ -20,7 +20,7 @@ def backward_track(asmt):
         if CSP.consistent(asmt, var, v):
         asmt[var] = v
         inferences = {}
-        inferences = CSP.infer(asmt, inferences, CSP, var, val)
+        inferences = CSP.infer(asmt, inferences, CSP, var, v)
 
         if inferences != "Fail":
             result = backward_track(asmt, c)
