@@ -1,3 +1,8 @@
+import sys
+from csp import *
+import Variables as v
+
+
 class Constraints:
     def __init__(self, name):
         self.name = name
@@ -29,7 +34,7 @@ class Constraints:
         vals = []
         for s in self.scope:
             # needs to improve to check if it is not assigned
-            if not s.assign():
+            if not s.is_assigned():
                 n = n + 1
                 vals.append(s)
         return n, vals
@@ -38,7 +43,7 @@ class Constraints:
         check = False
         for x, val in enumerate(self.scope):
             # need to improve
-            if val:
+            if not val.in_cur_domain(t[i]):
                 check = True
         return check
 

@@ -8,7 +8,42 @@ class Variables:
     def __init__(self, row, col, value):
         self.row = row
         self. col = col
-        self value = value
+        self.value = value
+        self.assigned_value = None
+
+    def is_assigned(self):
+        return self.assignedValue != None
+
+    def assign(self, value):
+
+        if self.is_assigned() or not self.in_cur_domain(value):
+            print("ERROR: trying to assign variable", self,
+                  "that is already assigned or illegal value (not in curdom)")
+            return
+
+        self.assignedValue = value
+
+    def unassign(self):
+        if not self.is_assigned():
+            print("ERROR: trying to unassign variable",
+                  self, " not yet assigned")
+            return
+        self.assignedValue = None
+
+    def get_assigned_value(self):
+        return self.assignedValue
+
+    def in_cur_domain(self, CSP, value):
+
+        if not value in self.domain:
+            return False
+        if self.is_assigned():
+            return value == self.get_assigned_value()
+        else:
+            return self.curdom[self.value_index(value)]
+
+    def value_index(self, value):
+        return self.dom.index(value)
 
 
 class CSP:

@@ -2,8 +2,9 @@ import queue
 import sys
 import copy
 from Constraints import *
-import csp as c
+
 from csp import *
+import csp as c
 
 
 def depth_limited_search():
