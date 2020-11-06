@@ -33,17 +33,17 @@ class Variables:
     def get_assigned_value(self):
         return self.assignedValue
 
-    def in_cur_domain(self, CSP, value):
+    def in_cur_domain(self,  value):
 
-        if not value in self.domain:
+        if not value in CSP.domain:
             return False
         if self.is_assigned():
             return value == self.get_assigned_value()
         else:
             return self.curdom[self.value_index(value)]
 
-    def value_index(self, value):
-        return self.dom.index(value)
+    def value_index(value):
+        return CSP.domain.index(value)
 
 
 class CSP:
