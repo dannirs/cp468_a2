@@ -1,6 +1,5 @@
 import sys
 from csp import *
-import Variables as v
 
 
 class Constraints:

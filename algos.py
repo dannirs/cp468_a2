@@ -4,7 +4,6 @@ import copy
 from Constraints import *
 
 from csp import *
-import csp as c
 
 
 def depth_limited_search():
@@ -13,15 +12,15 @@ def depth_limited_search():
 
 def backward_track(asmt):
     # might need change
-    if set(asmt.keys()) == set(c.variable):
+    if set(asmt.keys()) == set(CSP.variables):
         return asmt
-    var = c.select_unsigned_var(asmt, c)
-    domain = copy.deepcopy(c.domain)
-    for v in c.domain[var]:
-        if c.consistent(asmt, var, v):
+    var = CSP.select_unsigned_var(asmt, CSP)
+    domain = copy.deepcopy(CSP.domain)
+    for v in CSP.domain[var]:
+        if CSP.consistent(asmt, var, v):
         asmt[var] = v
         inferences = {}
-        inferences = c.inference(asmt, inferences, c, var, val)
+        inferences = CSP.infer(asmt, inferences, CSP, var, val)
 
         if inferences != "Fail":
             result = backward_track(asmt, c)
@@ -29,6 +28,6 @@ def backward_track(asmt):
             if result != "Fail":
                 return result
 
-        c.domain.update(domain)
+        CSP.domain.update(domain)
 
     return "Fail"
