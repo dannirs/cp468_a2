@@ -1,7 +1,7 @@
 import copy
 import sys
 import queue
-import algos
+
 NUMS = "123456789"
 
 
@@ -134,30 +134,46 @@ class CSP:
 
         return True
 def AC3(csp):
-    q = queue.Queue()
 
+    # Creating the queue to store CSPs in
+    queue_arcs = queue.Queue()
+
+    # Going through the constraints and storing the csp arcs into the queue
     for arc in csp.constraints:
-        q.put(arc)
-        
-    while not q.empty():
-        (Xi, Xj) = q.get()
+        queue_arcs.put(arc)
 
+    # while the queue is not empty, we retrieve the constraint arcs
+    while not queue_arcs.empty():
+        (Xi, Xj) = queue_arcs.get()
+        #check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
         if Revise(csp, Xi, Xj):
             if len(csp.domain[Xi]) == 0:
                 return False
                 
             for Xk in (csp.neighbors[Xi] - set(Xj)):
-                q.put((Xk, Xi))
+                queue_arcs.put((Xk, Xi))
     return True
 
 def Revise(csp, Xi, Xj):
     revised = False
     values = set(csp.domain[Xi])
+    index = 0
 
     for x in values:
-        if not isConsistent(csp, x, Xi, Xj):
+        is_consistent = True
+        for y in csp.domain[Xj]:
+            if x != y:
+                # is_consistent checks if there is a value that is consistent with x
+                is_consistent = False
+        if is_consistent:
             csp.domain[Xi] = csp.domain[Xi].replace(x, '')
             revised = True
+        else:
+            index += 1
+            
+        #if not isConsistent(csp, x, Xi, Xj):
+        #    csp.domain[Xi] = csp.domain[Xi].replace(x, '')
+        #    revised = True
 
     return revised
 
