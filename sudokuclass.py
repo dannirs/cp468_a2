@@ -10,14 +10,14 @@ row = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 
 class sudoku:
-    
+
     def __init__(self):
         self.cells = dict()
         self.empty = []
-        
+
     def make_board(self, filepath):
         board = []
-        
+
         with open(filepath) as fp:
             line = fp.readline()
             while line:
@@ -25,17 +25,17 @@ class sudoku:
                 values.pop()
                 board.append(values)
                 line = fp.readline()
-        
+
         for i in range(len(board)):
-            for j in range(len(board)): 
+            for j in range(len(board)):
                 if int(board[i][j]) == 0:
                     domain = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-                else: 
+                else:
                     domain = [int(board[i][j])]
                 self.cells[col[j] + row[i]] = domain
         print(self.cells)
         print()
-        
+
         return
 
     def print_board(self):
@@ -52,38 +52,38 @@ class sudoku:
                     print()
             elif count % 3 == 0:
                 print("|", end=" ")
-            if len(item) == 1: 
+            if len(item) == 1:
                 print(*item, end=" ")
-            else: 
+            else:
                 print(0, end=" ")
             count += 1
-                    
+
     def find_empty(self):
         for key, item in self.cells.items():
-            if len(item) > 1: 
+            if len(item) > 1:
                 self.empty.append(key)
 
         print("Empty:")
         print(self.empty)
         # for i in self.empty:
         #    print(i)
-            
+
         return
-    
+
     def mrv(self):
-        
+
         cell = None
         smallest = len(col) + 1
         for key, item in self.cells.items():
-            if len(item) != 1 and len(item) < smallest: 
+            if len(item) != 1 and len(item) < smallest:
                 smallest = len(item)
-                cell = key 
-                
+                cell = key
+
         if (cell == None):
-            return None 
+            return None
         else:
             return cell
-        
+
      def filled(self):
         for key, item in self.cells.items():
             if len(item) > 1: 
@@ -92,7 +92,7 @@ class sudoku:
     
 
 sudoku = sudoku()
-filepath = 'sudoku_input.txt'
+filepath = 'test.txt'
 board = sudoku.make_board(filepath)
 sudoku.print_board()
 print()
