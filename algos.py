@@ -1,56 +1,47 @@
 import queue
 import sys
 import copy
-from Constraints import *
+#from Constraints import *
 
 from csp import *
 
 
-def forwardCheck(self, key, value):
-    # still need to fix this
-    savedData = {}
-    savedData[key] = copy.copy(self.CSP.values[key])
-    self.unassigned[key] = False
+def AC3(csp):
+    q = queue.Queue()
 
-    self.CSP.values[key] = [value]
-    for Xk in self.CSP.getNeighbors(key):
-        index = 0
-        domain = self.CSP.values[Xk]
-        copied = False
-        for dValue in domain:
-            if (dValue == value):
-                if not copied:
-                    savedData[Xk] = copy.copy(domain)
-                    copied = True
-                domain.pop(index)
-            else:
-                index += 1
+    for arc in csp.constraints:
+        q.put(arc)
+        
+    while not q.empty():
+        (Xi, Xj) = q.get()
 
-    return savedData
+        if Revise(csp, Xi, Xj):
+            if len(csp.domain[Xi]) == 0:
+                return False
+                
+            for Xk in (csp.neighbors[Xi] - set(Xj)):
+                q.put((Xk, Xi))
+    return True
 
 
-def depth_limited_search():
-    return
-
-
-def backward_track(asmt):
+def backward_track(asmt, csp):
     # might need change
-    if set(asmt.keys()) == set(CSP.variables):
+    if set(asmt.keys()) == set(csp.variables):
         return asmt
-    var = CSP.select_unsigned_var(asmt, CSP)
-    domain = copy.deepcopy(CSP.domain)
-    for v in CSP.domain[var]:
-        if CSP.consistent(asmt, var, v):
-        asmt[var] = v
-        inferences = {}
-        inferences = CSP.infer(asmt, inferences, CSP, var, v)
+    var = csp.select_unsigned_var(asmt, csp)
+    domain = copy.deepcopy(csp.domain)
+    for v in csp.domain[var]:
+        if csp.consistent(asmt, var, v):
+            asmt[var] = v
+            inferences = {}
+            inferences = csp.infer(asmt, inferences, csp, var, v)
 
         if inferences != "Fail":
-            result = backward_track(asmt, c)
+            result = backward_track(asmt, csp)
 
             if result != "Fail":
                 return result
 
-        CSP.domain.update(domain)
+        csp.domain.update(domain)
 
     return "Fail"
