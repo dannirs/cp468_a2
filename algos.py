@@ -5,6 +5,28 @@ from Constraints import *
 
 from csp import *
 
+def forwardCheck(self, key, value):
+    #still need to fix this
+    savedData = {}
+    savedData[key] = copy.copy(self.csp.values[key])
+    self.unassigned[key] = False
+
+    self.csp.values[key] = [value]
+    for Xk in self.csp.getNeighbors(key):
+        index = 0
+        domain = self.csp.values[Xk]
+        copied = False
+        for dValue in domain:
+            if (dValue == value):
+                if not copied:
+                  savedData[Xk] = copy.copy(domain)
+                  copied = True
+                domain.pop(index)
+            else:
+                index += 1
+
+    return savedData
+
 
 def depth_limited_search():
     return
