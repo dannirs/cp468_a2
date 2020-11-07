@@ -72,12 +72,12 @@ class sudoku:
     
     def mrv(self):
         
-        cell = None;
-        smallest = len(col) + 1; 
+        cell = None
+        smallest = len(col) + 1
         for key, item in self.cells.items():
             if len(item) != 1 and len(item) < smallest: 
-                smallest = len(item);
-                cell = key; 
+                smallest = len(item)
+                cell = key 
                 
         if (cell == None):
             return None 
@@ -85,7 +85,7 @@ class sudoku:
             return cell
         
      def filled(self):
-        for item in self.cells.items():
+        for key, item in self.cells.items():
             if len(item) > 1: 
                 return False
         return True
