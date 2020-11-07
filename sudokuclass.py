@@ -83,6 +83,12 @@ class sudoku:
             return None 
         else:
             return cell
+        
+     def filled(self):
+        for item in self.cells.items():
+            if len(item) > 1: 
+                return False
+        return True
     
 
 sudoku = sudoku()
@@ -94,3 +100,5 @@ print()
 sudoku.find_empty()
 cell = sudoku.mrv()
 print("Minimum remaining value:", cell)
+filled = sudoku.filled()
+print("All cells filled:", filled)
