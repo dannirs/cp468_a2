@@ -92,7 +92,7 @@ class sudoku:
     
 
 sudoku = sudoku()
-filepath = 'sudoku.txt'
+filepath = 'sudoku_input.txt'
 board = sudoku.make_board(filepath)
 sudoku.print_board()
 print()
