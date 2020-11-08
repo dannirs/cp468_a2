@@ -3,6 +3,7 @@ import sys
 import queue
 
 NUMS = "123456789"
+DELIMITER = "-"
 
 
 class Variables:
@@ -65,7 +66,7 @@ class CSP:
         self.constraints = {(variable, neighbor)
                             for variable in self.variables for neighbor in self.neighbors[variable]}
 
-    #Creates column row, appends to neighbours array
+    # Creates column row, appends to neighbours array
     def colNeighbors(self, b, col):
         neighbors = []
         for i in range(col, len(b), 9):
@@ -116,7 +117,7 @@ class CSP:
 
         for i in range(9):
             if (i % 3 == 0):
-                print(dash)
+                print("{:-^12s}".format(DELIMITER))
 
             for j in range(9):
                 if (j % 3) == 0:
@@ -151,7 +152,7 @@ def AC3(csp):
         (Xi, Xj) = queue_arcs.get()
         # check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
         if Revise(csp, Xi, Xj):
-            #if length of the domain is 0, there's no arc-consistency so return false
+            # if length of the domain is 0, there's no arc-consistency so return false
             if len(csp.domain[Xi]) == 0:
                 return False
 
@@ -247,11 +248,11 @@ csp = CSP(
 
 if AC3(csp):
     if csp.solved():
-        print("----USING AC3----")
+        print("----SOLVED SUDOKU WITH AC3----")
         csp.printSudoku(csp.domain)
 
     else:
-        print("----USING BACKTRACKING----")
+        print("----SOLVED SUDOKU WITH BACKTRACKING----")
         sudoku = backward_track({}, csp)
         if sudoku == "Fail":
             print("Unsolvable")
