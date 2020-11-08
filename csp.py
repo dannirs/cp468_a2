@@ -65,6 +65,7 @@ class CSP:
         self.constraints = {(variable, neighbor)
                             for variable in self.variables for neighbor in self.neighbors[variable]}
 
+    #Creates column row, appends to neighbours array
     def colNeighbors(self, b, col):
         neighbors = []
         for i in range(col, len(b), 9):
@@ -150,6 +151,7 @@ def AC3(csp):
         (Xi, Xj) = queue_arcs.get()
         # check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
         if Revise(csp, Xi, Xj):
+            #if length of the domain is 0, there's no arc-consistency so return false
             if len(csp.domain[Xi]) == 0:
                 return False
 
