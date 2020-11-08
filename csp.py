@@ -13,10 +13,10 @@ class Variables:
         #self.assigned_value = None
         #self.cur_dom = [True] * len(csp.domain)
 
-    #def is_assigned(self):
+    # def is_assigned(self):
     #    return self.assignedValue != None
 
-    #def assign(self, value):
+    # def assign(self, value):
 
     #   if self.is_assigned() or not self.in_cur_domain(value):
     #        print("ERROR: trying to assign variable", self,
@@ -25,17 +25,17 @@ class Variables:
 
     #    self.assignedValue = value
 
-    #def unassign(self):
+    # def unassign(self):
     #    if not self.is_assigned():
     #        print("ERROR: trying to unassign variable",
     #              self, " not yet assigned")
     #        return
     #    self.assignedValue = None
 
-    #def get_assigned_value(self):
+    # def get_assigned_value(self):
     #    return self.assignedValue
 
-    #def in_cur_domain(self,  value):
+    # def in_cur_domain(self,  value):
 
     #    if not value in csp.domain:
     #        return False
@@ -44,7 +44,7 @@ class Variables:
     #    else:
     #        return self.cur_dom[self.value_index(value)]
 
-    #def value_index(value):
+    # def value_index(value):
     #    return csp.domain.index(value)
 
 
@@ -62,7 +62,8 @@ class CSP:
             (s, [u for u in self.cells if s in u]) for s in self.variables)
         self.neighbors = dict(
             (s, set(sum(self.cellNeighbors[s], [])) - set([s])) for s in self.variables)
-        self.constraints = {(variable, neighbor) for variable in self.variables for neighbor in self.neighbors[variable]}
+        self.constraints = {(variable, neighbor)
+                            for variable in self.variables for neighbor in self.neighbors[variable]}
 
     def colNeighbors(self, b, col):
         neighbors = []
@@ -97,7 +98,7 @@ class CSP:
                 return False
 
         return True
-    
+
     def printSudoku(self, values):
         print("SUDOKU:")
         dash = "------------"
@@ -108,21 +109,21 @@ class CSP:
         for var in self.variables:
             if len(values[var]) > 1:
                 domain += '0'
-            
+
             else:
-                domain += str(values[var]) 
+                domain += str(values[var])
 
         for i in range(9):
             if (i % 3 == 0):
                 print(dash)
-            
+
             for j in range(9):
                 if (j % 3) == 0:
                     line += '|'
-                
+
                 line += domain[counter]
                 counter += 1
-            
+
             print(line + '|')
             line = ''
         print(dash)
@@ -133,6 +134,8 @@ class CSP:
                 return False
 
         return True
+
+
 def AC3(csp):
 
     # Creating the queue to store CSPs in
@@ -145,14 +148,15 @@ def AC3(csp):
     # while the queue is not empty, we retrieve the constraint arcs
     while not queue_arcs.empty():
         (Xi, Xj) = queue_arcs.get()
-        #check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
+        # check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
         if Revise(csp, Xi, Xj):
             if len(csp.domain[Xi]) == 0:
                 return False
-                
+
             for Xk in (csp.neighbors[Xi] - set(Xj)):
                 queue_arcs.put((Xk, Xi))
     return True
+
 
 def Revise(csp, Xi, Xj):
     revised = False
@@ -170,12 +174,13 @@ def Revise(csp, Xi, Xj):
             revised = True
         else:
             index += 1
-            
-        #if not isConsistent(csp, x, Xi, Xj):
+
+        # if not isConsistent(csp, x, Xi, Xj):
         #    csp.domain[Xi] = csp.domain[Xi].replace(x, '')
         #    revised = True
 
     return revised
+
 
 def isConsistent(csp, x, Xi, Xj):
     for y in csp.domain[Xj]:
@@ -183,6 +188,8 @@ def isConsistent(csp, x, Xi, Xj):
             return True
 
     return False
+
+
 def backward_track(asmt, csp):
     # might need change
     if set(asmt.keys()) == set(csp.variables):
@@ -205,10 +212,12 @@ def backward_track(asmt, csp):
 
     return "Fail"
 
+
 def select_unsigned_var(assignment, csp):
     unassigned_vars = dict((cell, len(
         csp.domain[cell])) for cell in csp.domain if cell not in assignment.keys())
     return min(unassigned_vars, key=unassigned_vars.get)
+
 
 def infer(assignment, inferences, csp, var, val):
     inferences[var] = val
@@ -223,14 +232,16 @@ def infer(assignment, inferences, csp, var, val):
 
             if len(remaining) == 1:
                 flag = infer(assignment, inferences,
-                            csp, neighbor, remaining)
+                             csp, neighbor, remaining)
 
                 if flag == "Fail":
                     return "Fail"
 
     return inferences
 
-csp = CSP('003020600900305001001806400008102900700000008006708200002609500800203009005010300')
+
+csp = CSP(
+    '003020600900305001001806400008102900700000008006708200002609500800203009005010300')
 
 if AC3(csp):
     if csp.solved():
@@ -242,7 +253,6 @@ if AC3(csp):
         sudoku = backward_track({}, csp)
         if sudoku == "Fail":
             print("Unsolvable")
-        
+
         else:
             csp.printSudoku(sudoku)
-
