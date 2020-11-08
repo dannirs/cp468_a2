@@ -3,7 +3,8 @@ import sys
 import queue
 
 NUMS = "123456789"
-DELIMITER = "-"
+HOR_DELIMITER = "-"
+VER_DELIMITER = "|"
 
 
 class Variables:
@@ -103,10 +104,9 @@ class CSP:
 
     def printSudoku(self, values):
         print("SUDOKU:")
-        dash = "------------"
         line = ""
-        counter = 0
-        domain = ''
+        sum = 0
+        domain = ""
 
         for var in self.variables:
             if len(values[var]) > 1:
@@ -117,18 +117,18 @@ class CSP:
 
         for i in range(9):
             if (i % 3 == 0):
-                print("{:-^12s}".format(DELIMITER))
+                print("{:-^12s}".format(HOR_DELIMITER))
 
             for j in range(9):
                 if (j % 3) == 0:
-                    line += '|'
+                    line += VER_DELIMITER
 
-                line += domain[counter]
-                counter += 1
+                line += domain[sum]
+                sum += 1
 
-            print(line + '|')
+            print(line + VER_DELIMITER)
             line = ''
-        print(dash)
+        print("{:-^12s}".format(HOR_DELIMITER))
 
     def consistent(self, assignment, var, val):
         for neighbor in self.neighbors[var]:
