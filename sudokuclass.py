@@ -3,7 +3,7 @@ Created on 2020 M11 4
 
 @author: Danni
 '''
-from csp import CSP
+#from csp import CSP
 col = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 row = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
@@ -83,7 +83,7 @@ class sudoku:
         else:
             return cell
 
-     def filled(self):
+    def filled(self):
         for key, item in self.cells.items():
             if len(item) > 1: 
                 return False
