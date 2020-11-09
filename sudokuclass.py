@@ -93,13 +93,15 @@ class sudoku:
 def file_to_string(fp):
     str = ""
     buffer = fp.readline()
-    if buffer != " " or buffer != "\n":
-        str = str + buffer
+    for i in buffer:
+        if i.isdigit():
+            str = str + i
     else:
         while buffer != "":
             buffer = fp.readline()
-            if buffer != " " or buffer != "\n":
-                str = str + buffer
+            for i in buffer:
+                if i.isdigit():
+                    str = str + i
     return str
 
 
@@ -118,7 +120,7 @@ print("All cells filled:", filled)
 fp = open(filepath, "r", encoding="utf-8")
 sudoku_string = file_to_string(fp)
 print(sudoku_string)
-"""
+
 csp = CSP(sudoku_string)
 
 if AC_3(csp):
@@ -134,5 +136,5 @@ if AC_3(csp):
 
         else:
             csp.sudoku_output(sudoku)
-"""
+
 fp.close()
