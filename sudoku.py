@@ -4,6 +4,7 @@ Created on 2020 M11 4
 @author: Danni
 '''
 from csp import *
+from functions import *
 col = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 row = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
@@ -90,23 +91,8 @@ class sudoku:
         return True
 
 
-def file_to_string(fp):
-    str = ""
-    buffer = fp.readline()
-    for i in buffer:
-        if i.isdigit():
-            str = str + i
-    else:
-        while buffer != "":
-            buffer = fp.readline()
-            for i in buffer:
-                if i.isdigit():
-                    str = str + i
-    return str
-
-
 sudoku = sudoku()
-filepath = 'sudoku_input.txt'
+filepath = 'sudoku_backward.txt'
 board = sudoku.make_board(filepath)
 sudoku.print_board()
 print()
