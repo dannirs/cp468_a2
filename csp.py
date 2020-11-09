@@ -48,8 +48,8 @@ class CSP:
         return neighbors
 
     def select_unsigned_var(assignment, csp):
-        unassigned_vars = dict((cell, len(
-            csp.domain[cell])) for cell in csp.domain if cell not in assignment.keys())
+        unassigned_vars = dict((v, len(
+            csp.domain[v])) for i in csp.domain if i not in assignment.keys())
         return min(unassigned_vars, key=unassigned_vars.get)
 
     # Creates rows, appends to neighbors array
