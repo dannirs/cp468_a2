@@ -1,6 +1,9 @@
 import copy
 import sys
 import queue
+from variables import Variables
+
+
 NUMS = "123456789"
 HOR_DELIMITER = "-"
 VER_DELIMITER = "|"
@@ -48,8 +51,8 @@ class CSP:
         return neighbors
 
     def select_unsigned_var(assignment, csp):
-        unassigned_vars = dict((v, len(
-            csp.domain[v])) for i in csp.domain if i not in assignment.keys())
+        unassigned_vars = dict((Variables, len(
+            csp.domain[Variables])) for i in csp.domain if i not in assignment.keys())
         return min(unassigned_vars, key=unassigned_vars.get)
 
     # Creates rows, appends to neighbors array
