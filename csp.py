@@ -1,88 +1,45 @@
 import copy
 import sys
 import queue
-
 NUMS = "123456789"
 HOR_DELIMITER = "-"
 VER_DELIMITER = "|"
 
 
-class Variables:
-    def __init__(self, row, col, value):
-        self.row = row
-        self. col = col
-        self.value = value
-        #self.assigned_value = None
-        #self.cur_dom = [True] * len(csp.domain)
-
-    # def is_assigned(self):
-    #    return self.assignedValue != None
-
-    # def assign(self, value):
-
-    #   if self.is_assigned() or not self.in_cur_domain(value):
-    #        print("ERROR: trying to assign variable", self,
-    #              "that is already assigned or illegal value (not in curdom)")
-    #        return
-
-    #    self.assignedValue = value
-
-    # def unassign(self):
-    #    if not self.is_assigned():
-    #        print("ERROR: trying to unassign variable",
-    #              self, " not yet assigned")
-    #        return
-    #    self.assignedValue = None
-
-    # def get_assigned_value(self):
-    #    return self.assignedValue
-
-    # def in_cur_domain(self,  value):
-
-    #    if not value in csp.domain:
-    #        return False
-    #    if self.is_assigned():
-    #        return value == self.get_assigned_value()
-    #    else:
-    #        return self.cur_dom[self.value_index(value)]
-
-    # def value_index(value):
-    #    return csp.domain.index(value)
-
-# Creating CSP class which makes the sudoku board
 class CSP:
 
     def __init__(self, filename):
 
-        self.elements = [row + column for row in 'ABCDEFGHI' for column in '123456789']
+        self.elements = [
+            row + column for row in 'ABCDEFGHI' for column in '123456789']
 
         self.domain = dict(
             (self.elements[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(filename)))
 
-        x = [self.column_neighbor_arc(self.elements, i) 
-                for i in range(9)]
+        x = [self.column_neighbor_arc(self.elements, i)
+             for i in range(9)]
 
         y = [self.row_neighbor_arc(self.elements, i)
-                for i in range(9)]
+             for i in range(9)]
 
         z = [self.blockNeighbors(self.elements, i, j)
-                for i in range(9) for j in range(9)]
+             for i in range(9) for j in range(9)]
 
         self.box = (x + y + z)
 
         self.cellNeighbors = dict(
-            (s, [u for u in self.box if s in u]) 
-                for s in self.elements)
+            (s, [u for u in self.box if s in u])
+            for s in self.elements)
 
         self.neighbors = dict(
-            (s, set(sum(self.cellNeighbors[s], [])) - set([s])) 
-                for s in self.elements)
+            (s, set(sum(self.cellNeighbors[s], [])) - set([s]))
+            for s in self.elements)
 
         self.constraints = {(variable, neighbor)
                             for variable in self.elements for neighbor in self.neighbors[variable]}
-    
 
     # Creates columns, appends to neighbors array
+
     def column_neighbor_arc(self, y, col):
         neighbors = []
         for i in range(col, len(y), 9):
@@ -150,7 +107,7 @@ class CSP:
             line = ''
         print("{:-^12s}".format(HOR_DELIMITER))
 
-    #Checks arc consistency, compares to see if value is already in the constraint
+    # Checks arc consistency, compares to see if value is already in the constraint
     def arc_consistent(self, assignment, var, val):
         for neighbor in self.neighbors[var]:
             if neighbor in assignment.keys() and assignment[neighbor] == val:
@@ -158,7 +115,9 @@ class CSP:
 
         return True
 
-#ac-3 algorithm
+# ac-3 algorithm
+
+
 def AC_3(csp):
 
     # Creating the queue to store CSPs in
@@ -181,7 +140,9 @@ def AC_3(csp):
                 queue_arcs.put((Xk, Xi))
     return True
 
-#Checks if the value is already in the domain, and if it is, change the domain. Return true if domain was changed, false otherwise
+# Checks if the value is already in the domain, and if it is, change the domain. Return true if domain was changed, false otherwise
+
+
 def domain_change(csp, Xi, Xj):
     flag = False
     values = set(csp.domain[Xi])
@@ -206,14 +167,14 @@ def domain_change(csp, Xi, Xj):
     return flag
 
 
-#def consistency_check(csp, x, Xi, Xj):
+# def consistency_check(csp, x, Xi, Xj):
 #    for y in csp.domain[Xj]:
 #        if Xj in csp.neighbors[Xi] and y != x:
 #            return True
 #
 #    return False
 
-#uses backtracking algorithm to solve the puzzle
+# uses backtracking algorithm to solve the puzzle
 def backward_track(asmt, csp):
     # might need change
     if set(asmt.keys()) == set(csp.elements):
@@ -264,19 +225,4 @@ def infer(assignment, inferences, csp, var, val):
     return inferences
 
 
-csp = CSP(
-    '003020600900305001001806400008102900700000008006708200002609500800203009005010300')
-
-if AC_3(csp):
-    if csp.check_solve():
-        print("----Solve SUDOKU WITH AC3----")
-        csp.sudoku_output(csp.domain)
-
-    else:
-        print("----Solve SUDOKU WITH BACKTRACKING----")
-        sudoku = backward_track({}, csp)
-        if sudoku == "Fail":
-            print("Unsolvable")
-
-        else:
-            csp.sudoku_output(sudoku)
+#csp = CSP('003020600900305001001806400008102900700000008006708200002609500800203009005010300')
