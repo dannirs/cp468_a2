@@ -50,12 +50,8 @@ class CSP:
 
         return neighbors
 
-    def select_unsigned_var(assignment, csp):
-        unassigned_vars = dict((Variables, len(
-            csp.domain[Variables])) for i in csp.domain if i not in assignment.keys())
-        return min(unassigned_vars, key=unassigned_vars.get)
-
     # Creates rows, appends to neighbors array
+
     def row_neighbor_arc(self, y, row):
         neighbors = []
         end = (row + 1) * 9
@@ -188,13 +184,13 @@ def backward_track(asmt, csp):
     # might need change
     if set(asmt.keys()) == set(csp.elements):
         return asmt
-    var = csp.select_unsigned_var(asmt)
+    var = select_unsigned_var(asmt, csp)
     domain = copy.deepcopy(csp.domain)
     for v in csp.domain[var]:
         if csp.arc_consistent(asmt, var, v):
             asmt[var] = v
             inferences = {}
-            inferences = csp.infer(asmt, inferences, csp, var, v)
+            inferences = infer(asmt, inferences, csp, var, v)
 
         if inferences != "Fail":
             result = backward_track(asmt, csp)
@@ -205,6 +201,12 @@ def backward_track(asmt, csp):
         csp.domain.update(domain)
 
     return "Fail"
+
+
+def select_unsigned_var(assignment, csp):
+    unassigned_vars = dict((Variables, len(
+        csp.domain[Variables])) for Variables in csp.domain if Variables not in assignment.keys())
+    return min(unassigned_vars, key=unassigned_vars.get)
 
 
 def infer(assignment, inferences, csp, var, val):
