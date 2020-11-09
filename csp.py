@@ -47,6 +47,11 @@ class CSP:
 
         return neighbors
 
+    def select_unsigned_var(assignment, csp):
+        unassigned_vars = dict((cell, len(
+            csp.domain[cell])) for cell in csp.domain if cell not in assignment.keys())
+        return min(unassigned_vars, key=unassigned_vars.get)
+
     # Creates rows, appends to neighbors array
     def row_neighbor_arc(self, y, row):
         neighbors = []
@@ -166,7 +171,6 @@ def domain_change(csp, Xi, Xj):
 
     return flag
 
-
 # def consistency_check(csp, x, Xi, Xj):
 #    for y in csp.domain[Xj]:
 #        if Xj in csp.neighbors[Xi] and y != x:
@@ -175,11 +179,13 @@ def domain_change(csp, Xi, Xj):
 #    return False
 
 # uses backtracking algorithm to solve the puzzle
+
+
 def backward_track(asmt, csp):
     # might need change
     if set(asmt.keys()) == set(csp.elements):
         return asmt
-    var = csp.select_unsigned_var(asmt, csp)
+    var = csp.select_unsigned_var(asmt)
     domain = copy.deepcopy(csp.domain)
     for v in csp.domain[var]:
         if csp.arc_consistent(asmt, var, v):
@@ -196,12 +202,6 @@ def backward_track(asmt, csp):
         csp.domain.update(domain)
 
     return "Fail"
-
-
-def select_unsigned_var(assignment, csp):
-    unassigned_vars = dict((cell, len(
-        csp.domain[cell])) for cell in csp.domain if cell not in assignment.keys())
-    return min(unassigned_vars, key=unassigned_vars.get)
 
 
 def infer(assignment, inferences, csp, var, val):
