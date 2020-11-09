@@ -3,7 +3,7 @@ Created on 2020 M11 4
 
 @author: Danni
 '''
-from csp import CSP
+from csp import *
 col = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 row = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
@@ -90,6 +90,19 @@ class sudoku:
         return True
 
 
+def file_to_string(fp):
+    str = ""
+    buffer = fp.readline()
+    if buffer != " " or buffer != "\n":
+        str = str + buffer
+    else:
+        while buffer != "":
+            buffer = fp.readline()
+            if buffer != " " or buffer != "\n":
+                str = str + buffer
+    return str
+
+
 sudoku = sudoku()
 filepath = 'sudoku_input.txt'
 board = sudoku.make_board(filepath)
@@ -101,3 +114,25 @@ cell = sudoku.mrv()
 print("Minimum remaining value:", cell)
 filled = sudoku.filled()
 print("All cells filled:", filled)
+
+fp = open(filepath, "r", encoding="utf-8")
+sudoku_string = file_to_string(fp)
+print(sudoku_string)
+"""
+csp = CSP(sudoku_string)
+
+if AC_3(csp):
+    if csp.check_solve():
+        print("----Solve SUDOKU WITH AC3----")
+        csp.sudoku_output(csp.domain)
+
+    else:
+        print("----Solve SUDOKU WITH BACKTRACKING----")
+        sudoku = backward_track({}, csp)
+        if sudoku == "Fail":
+            print("Unsolvable")
+
+        else:
+            csp.sudoku_output(sudoku)
+"""
+fp.close()
