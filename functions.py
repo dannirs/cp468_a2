@@ -1,5 +1,6 @@
 import queue
 import copy
+from CSP import *
 # ac-3 algorithm
 
 
