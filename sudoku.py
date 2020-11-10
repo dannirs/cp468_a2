@@ -92,7 +92,7 @@ class sudoku:
 
 
 sudoku = sudoku()
-filepath1 = 'ac3_sudoku.txt'
+filepath1 = 'sudoku_test_3.txt'
 filepath2 = 'sudoku_backward.txt'
 #board = sudoku.make_board(filepath)
 # sudoku.print_board()
@@ -118,7 +118,7 @@ if AC_3(csp1):
     else:
         print("----Solve SUDOKU WITH BACKTRACKING----")
         sudoku = backward_track({}, csp1)
-        if sudoku == "Fail":
+        if sudoku == False:
             print("Unsolvable")
 
         else:
