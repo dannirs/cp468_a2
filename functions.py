@@ -74,15 +74,15 @@ def backward_track(asmt, csp):
             inferences = {}
             inferences = infer(asmt, inferences, csp, var, v)
 
-        if inferences != "Fail":
+        if inferences == True:
             result = backward_track(asmt, csp)
 
-            if result != "Fail":
+            if result == True:
                 return result
 
         csp.domain.update(domain)
 
-    return "Fail"
+    return False
 
 
 def select_unsigned_var(assignment, csp):
@@ -93,11 +93,10 @@ def select_unsigned_var(assignment, csp):
 
 def infer(assignment, inferences, csp, var, val):
     inferences[var] = val
-
     for neighbor in csp.neighbors[var]:
         if neighbor not in assignment and val in csp.domain[neighbor]:
             if len(csp.domain[neighbor]) == 1:
-                return "Fail"
+                return False
 
             remaining = csp.domain[neighbor] = csp.domain[neighbor].replace(
                 val, "")
@@ -106,8 +105,8 @@ def infer(assignment, inferences, csp, var, val):
                 flag = infer(assignment, inferences,
                              csp, neighbor, remaining)
 
-                if flag == "Fail":
-                    return "Fail"
+                if flag == False:
+                    return flag
 
     return inferences
 
