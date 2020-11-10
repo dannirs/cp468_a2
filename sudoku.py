@@ -92,7 +92,8 @@ class sudoku:
 
 
 sudoku = sudoku()
-filepath = 'ac3_sudoku.txt'
+filepath1 = 'ac3_sudoku.txt'
+filepath2 = 'sudoku_backward.txt'
 #board = sudoku.make_board(filepath)
 # sudoku.print_board()
 print()
@@ -103,24 +104,24 @@ print("Minimum remaining value:", cell)
 filled = sudoku.filled()
 print("All cells filled:", filled)
 
-fp = open(filepath, "r", encoding="utf-8")
-sudoku_string = file_to_string(fp)
-print(sudoku_string)
+fp1 = open(filepath1, "r", encoding="utf-8")
+sudoku_string1 = file_to_string(fp1)
+print(sudoku_string1)
 
-csp = CSP(sudoku_string)
+csp1 = CSP(sudoku_string1)
 
-if AC_3(csp):
-    if csp.check_solve():
+if AC_3(csp1):
+    if csp1.check_solve():
         print("----Solve SUDOKU WITH AC3----")
-        csp.sudoku_output(csp.domain)
+        csp1.sudoku_output(csp1.domain)
 
     else:
         print("----Solve SUDOKU WITH BACKTRACKING----")
-        sudoku = backward_track({}, csp)
+        sudoku = backward_track({}, csp1)
         if sudoku == "Fail":
             print("Unsolvable")
 
         else:
-            csp.sudoku_output(sudoku)
+            csp1.sudoku_output(sudoku)
 
-fp.close()
+fp1.close()
