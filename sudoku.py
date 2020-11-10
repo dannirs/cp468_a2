@@ -92,7 +92,7 @@ class sudoku:
 
 
 sudoku = sudoku()
-filepath = 'sudoku_backward.txt'
+filepath = 'ac3_sudoku.txt'
 board = sudoku.make_board(filepath)
 sudoku.print_board()
 print()
