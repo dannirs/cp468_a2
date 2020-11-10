@@ -90,7 +90,10 @@ class CSP:
         domain = ""
 
         for var in self.elements:
-            # if len(values[var]) > 1:
+            #if len(values[var]) > 1:
+            #    domain += '0'
+            #if values != False:
+            #else:
             if values != False:
                 domain += str(values[var])
 
