@@ -93,8 +93,8 @@ class sudoku:
 
 sudoku = sudoku()
 filepath = 'ac3_sudoku.txt'
-board = sudoku.make_board(filepath)
-sudoku.print_board()
+#board = sudoku.make_board(filepath)
+# sudoku.print_board()
 print()
 print()
 sudoku.find_empty()
