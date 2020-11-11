@@ -71,11 +71,11 @@ def backward_track(task, constraint):
             inferences = {}
             inferences = helper_maintain(task, inferences, constraint, ele, e)
 
-        if inferences != False:
-            result = backward_track(task, constraint)
+            if inferences != False:
+                result = backward_track(task, constraint)
 
-            if result != False:
-                return result
+                if result != False:
+                    return result
 
         constraint.zone.update(zone)
 
