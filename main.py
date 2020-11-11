@@ -1,6 +1,6 @@
 from csp import *
 from functions import *
-from sudoku import *
+
 
 filepath1 = 'ac3_sudoku.txt'
 filepath2 = 'sudoku_backward.txt'
