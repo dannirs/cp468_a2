@@ -2,18 +2,8 @@ from csp import *
 from functions import *
 from sudoku import *
 
-sudoku = sudoku()
 filepath1 = 'ac3_sudoku.txt'
 filepath2 = 'sudoku_backward.txt'
-#board = sudoku.make_board(filepath)
-# sudoku.print_board()
-print()
-print()
-sudoku.find_empty()
-cell = sudoku.mrv()
-print("Minimum remaining value:", cell)
-filled = sudoku.filled()
-print("All cells filled:", filled)
 
 fp1 = open(filepath1, "r", encoding="utf-8")
 sudoku_string1 = file_to_string(fp1)
