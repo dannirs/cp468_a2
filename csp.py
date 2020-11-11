@@ -17,6 +17,7 @@ class CSP:
     def __init__(self, filename):
 
         # Assigning labels to each value in the elements array
+        # Creating the set array
         self.elements = []
 
         for row in ABC:
@@ -24,7 +25,7 @@ class CSP:
                 self.elements.append(row + column)
 
         self.zone = dict(
-            (self.elements[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(filename)))
+            (self.elements[j], NUMS if filename[j] == '0' else filename[j]) for j in range(len(filename)))
 
         # Storing the column constraints into x
         col_cstr = []
@@ -48,17 +49,17 @@ class CSP:
         self.constraints_box = (box_constraints)
 
         self.element_adjacent = dict(
-            (s, [u for u in self.constraints_box if s in u])
-            for s in self.elements)
+            (c, [w for w in self.constraints_box if c in w])
+            for c in self.elements)
 
         self.adjacent = dict(
-            (s, set(sum(self.element_adjacent[s], [])) - set([s]))
-            for s in self.elements)
+            (c, set(sum(self.element_adjacent[c], [])) - set([c]))
+            for c in self.elements)
 
         self.arc_consistency = set()
-        for variable in self.elements:
-            for neighbor in self.adjacent[variable]:
-                self.arc_consistency.add((variable,neighbor))
+        for element in self.elements:
+            for adjacent in self.adjacent[element]:
+                self.arc_consistency.add((element,adjacent))
 
     # Stores all column values and their neighbours inside the neighbors array
 
