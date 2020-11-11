@@ -121,26 +121,21 @@ class CSP:
         sum = 0
 
         for x in self.elements:
-            #if len(values[var]) > 1:
-            #    domain += '0'
-            #if values != False:
-            #else:
             if values != False:
                 a += str(values[x])
 
-        for i in range(9):
+        for k in range(9):
 
-            if (i % 3 == 0):
+            if (k % 3 == 0):
                 print("{:-^12s}".format(HOR_DELIMITER))
 
-            for j in range(9):
+            for l in range(9):
 
-                if (j % 3) == 0:
+                if (l % 3) == 0:
                     thread += VER_DELIMITER
 
                 thread += a[sum]
                 sum += 1
-
             print(thread + VER_DELIMITER)
             thread = ''
             
