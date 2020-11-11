@@ -4,27 +4,31 @@ from csp import *
 # ac-3 algorithm
 
 
-def AC_3(csp):
+def AC_3(constraints):
+    flag = False
 
     # Creating the queue to store CSPs in
     queue_arcs = queue.Queue()
 
     # Going through the constraints and storing the csp arcs into the queue
-    for arc in csp.arc_consistency:
-        queue_arcs.put(arc)
+    for links in constraints.arc_consistency:
+        queue_arcs.put(links)
 
     # while the queue is not empty, we retrieve the constraint arcs
-    while not queue_arcs.empty():
-        (Xi, Xj) = queue_arcs.get()
-        # check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
-        if domain_change(csp, Xi, Xj):
-            # if length of the domain is 0, there's no arc-consistency so return false
-            if len(csp.domain[Xi]) == 0:
-                return False
+    while queue_arcs.empty() != flag:
+        (x, y) = queue_arcs.get()
 
-            for Xk in (csp.adjacent[Xi] - set(Xj)):
-                queue_arcs.put((Xk, Xi))
-    return True
+        # check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
+        if domain_change(constraints, x, y):
+
+            # if length of the domain is 0, there's no arc-consistency so return false
+            if len(constraints.domain[x]) == 0:
+                return flag
+
+            for z in (constraints.adjacent[x] - set(y)):
+                queue_arcs.put((z, x))
+    flag = True
+    return flag
 
 # Checks if the value is already in the domain, and if it is, change the domain. Return true if domain was changed, false otherwise
 
