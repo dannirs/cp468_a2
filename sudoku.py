@@ -118,9 +118,33 @@ if AC_3(csp1):
     else:
         print("----Solve SUDOKU WITH BACKTRACKING----")
         sudoku = backward_track({}, csp1)
-        if sudoku == "Fail":
+        if sudoku == False:
             print("Unsolvable")
 
         else:
             csp1.sudoku_output(sudoku)
+else:
+    print("Unsolvable")
+fp2 = open(filepath2, "r", encoding="utf-8")
+sudoku_string2 = file_to_string(fp2)
+print(sudoku_string2)
+
+csp2 = CSP(sudoku_string2)
+
+if AC_3(csp2):
+    if csp2.check_solve():
+        print("----Solve SUDOKU WITH AC3----")
+        csp2.sudoku_output(csp2.domain)
+
+    else:
+        print("----Solve SUDOKU WITH BACKTRACKING----")
+        sudoku = backward_track({}, csp2)
+        if sudoku == False:
+            print("Unsolvable")
+
+        else:
+            csp1.sudoku_output(sudoku)
+else:
+    print("Unsolvable")
 fp1.close()
+fp2.close()
