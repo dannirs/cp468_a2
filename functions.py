@@ -16,7 +16,7 @@ def AC_3(constraints):
         queue_arcs.put(links)
 
     # while the queue is not empty, we retrieve the constraint arcs
-    while queue_arcs.empty() != flag:
+    while queue_arcs.empty() != True:
         # x = row, y = col
         (x, y) = queue_arcs.get()
 
