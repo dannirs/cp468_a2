@@ -5,9 +5,11 @@ from csp import *
 
 #AC-3 algorithm 
 def AC_3(constraints):
+    
+    # returns false if inconsistency is found, otherwise returns true
     flag = False
 
-    # Creating the queue to store CSPs in
+    # Creating the queue to store CSP's arcs in
     queue_arcs = queue.Queue()
 
     # Going through the constraints and storing the csp arcs into the queue
@@ -16,6 +18,7 @@ def AC_3(constraints):
 
     # while the queue is not empty, we retrieve the constraint arcs
     while queue_arcs.empty() != flag:
+        # x = row, y = col
         (x, y) = queue_arcs.get()
 
         # Checks arc consistency, if it's not maintained then the domain is changed
@@ -25,8 +28,11 @@ def AC_3(constraints):
             if len(constraints.zone[x]) == 0:
                 return flag
 
+            # get x's neighboring constraints and insert into queue to check this next
             for z in (constraints.adjacent[x] - set(y)):
                 queue_arcs.put((z, x))
+    
+    # if all constraint arcs have been checked and there are no empty domains, then there are no inconsistencies so return true
     flag = True
     return flag
 
