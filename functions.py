@@ -10,7 +10,7 @@ def AC_3(csp):
     queue_arcs = queue.Queue()
 
     # Going through the constraints and storing the csp arcs into the queue
-    for arc in csp.constraints:
+    for arc in csp.arc_consistency:
         queue_arcs.put(arc)
 
     # while the queue is not empty, we retrieve the constraint arcs
@@ -22,7 +22,7 @@ def AC_3(csp):
             if len(csp.domain[Xi]) == 0:
                 return False
 
-            for Xk in (csp.neighbors[Xi] - set(Xj)):
+            for Xk in (csp.adjacent[Xi] - set(Xj)):
                 queue_arcs.put((Xk, Xi))
     return True
 
@@ -62,20 +62,20 @@ def domain_change(csp, Xi, Xj):
 # uses backtracking algorithm to solve the puzzle
 
 
-def backward_track(asmt, csp):
+def backward_track(task, csp):
     # might need change
-    if set(asmt.keys()) == set(csp.elements):
-        return asmt
-    var = select_unsigned_var(asmt, csp)
+    if set(task.keys()) == set(csp.elements):
+        return task
+    var = select_unsigned_var(task, csp)
     domain = copy.deepcopy(csp.domain)
     for v in csp.domain[var]:
-        if csp.arc_consistent(asmt, var, v):
-            asmt[var] = v
+        if csp.constraint_consistency(task, var, v):
+            task[var] = v
             inferences = {}
-            inferences = infer(asmt, inferences, csp, var, v)
+            inferences = infer(task, inferences, csp, var, v)
 
         if inferences != "Fail":
-            result = backward_track(asmt, csp)
+            result = backward_track(task, csp)
 
             if result != "Fail":
                 return result
@@ -93,7 +93,7 @@ def select_unsigned_var(assignment, csp):
 
 def infer(assignment, inferences, csp, var, val):
     inferences[var] = val
-    for neighbor in csp.neighbors[var]:
+    for neighbor in csp.adjacent[var]:
         if neighbor not in assignment and val in csp.domain[neighbor]:
             if len(csp.domain[neighbor]) == 1:
                 return "Fail"

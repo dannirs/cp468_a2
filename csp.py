@@ -1,121 +1,158 @@
 import copy
 import sys
-import queue
 from variables import Variables
+import queue
+
 
 
 NUMS = "123456789"
 HOR_DELIMITER = "-"
 VER_DELIMITER = "|"
+ABC = 'ABCDEFGHI'
+
 
 
 class CSP:
 
     def __init__(self, filename):
 
-        self.elements = [
-            row + column for row in 'ABCDEFGHI' for column in '123456789']
+        # Assigning labels to each value in the elements array
+        self.elements = []
+
+        for row in ABC:
+            for column in NUMS:
+                self.elements.append(row + column)
 
         self.domain = dict(
             (self.elements[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(filename)))
 
-        x = [self.column_neighbor_arc(self.elements, i)
-             for i in range(9)]
+        # Storing the column constraints into x
+        col_cstr = []
+        # Storing row constraints into y
+        row_cstr = []
+        # Storing 3x3 block constraints into z
+        block_cstr = []
 
-        y = [self.row_neighbor_arc(self.elements, i)
-             for i in range(9)]
+        # Runs through the row, column, and block constraint arcs and stores them in the arrays
+        for i in range(9):
+            col_cstr.append(self.column_neighbor_arc(self.elements, i))
 
-        z = [self.blockNeighbors(self.elements, i, j)
-             for i in range(9) for j in range(9)]
+        for i in range(9):
+            row_cstr.append(self.row_neighbor_arc(self.elements, i))
 
-        self.box = (x + y + z)
+        for r in range(9):
+            for c in range(9):
+                block_cstr.append(self.block_neighbor_arc(self.elements, r, c))
 
-        self.cellNeighbors = dict(
-            (s, [u for u in self.box if s in u])
+        box_constraints = col_cstr + row_cstr + block_cstr
+        self.constraints_box = (box_constraints)
+
+        self.element_adjacent = dict(
+            (s, [u for u in self.constraints_box if s in u])
             for s in self.elements)
 
-        self.neighbors = dict(
-            (s, set(sum(self.cellNeighbors[s], [])) - set([s]))
+        self.adjacent = dict(
+            (s, set(sum(self.element_adjacent[s], [])) - set([s]))
             for s in self.elements)
 
-        self.constraints = {(variable, neighbor)
-                            for variable in self.elements for neighbor in self.neighbors[variable]}
+        self.arc_consistency = set()
+        for variable in self.elements:
+            for neighbor in self.adjacent[variable]:
+                self.arc_consistency.add((variable,neighbor))
 
-    # Creates columns, appends to neighbors array
+    # Stores all column values and their neighbours inside the neighbors array
 
-    def column_neighbor_arc(self, y, col):
-        neighbors = []
-        for i in range(col, len(y), 9):
-            neighbors.append(y[i])
+    def column_neighbor_arc(self, y, c):
 
-        return neighbors
+        column_arc = []
 
-    # Creates rows, appends to neighbors array
+        for i in range(c, len(y), 9):
+            column_arc.append(y[i])
 
-    def row_neighbor_arc(self, y, row):
-        neighbors = []
-        end = (row + 1) * 9
-        start = end - 9
-        for i in range(start, end, 1):
-            neighbors.append(y[i])
+        return column_arc
 
-        return neighbors
+    # stores all row values and their neighbours inside the neighbors array
 
-    # Creates the 3x3 block and stores it in the neighbours array
-    def blockNeighbors(self, y, row, col):
-        neighbors = []
-        domRow = row - row % 3
-        domCol = col - col % 3
-        for j in range(3):
-            for i in range(3):
-                v = y[(j + domCol) + (i + domRow) * 9]
-                neighbors.append(v)
+    def row_neighbor_arc(self, y, r):
 
-        return neighbors
+        row_arc = []
 
-    # Checks if the puzzle is check_solve
+        last = (r + 1) * 9
+        begin = last - 9
+
+        for k in range(begin, last, 1):
+            row_arc.append(y[k])
+
+        return row_arc
+
+    # stores values in 3x3 blocks into neighbors array
+    def block_neighbor_arc(self, y, r, c):
+
+        block_constraint = []
+
+        # Calculating the column domain
+        col_domain = c - c % 3
+        # Calculating the row domain
+        row_domain = r - r % 3
+
+        for cl in range(3):
+            for rw in range(3):
+                arr = y[(cl + col_domain) + (rw + row_domain) * 9]
+                block_constraint.append(arr)
+
+        return block_constraint
+
+    # Helper function which checks to see if the puzzle is solved
     def check_solve(self):
         is_solved = True
-        for v in self.elements:
-            if len(self.domain[v]) > 1:
+        for ele in self.elements:
+            if len(self.domain[ele]) > 1:
                 is_solved = False
                 break
         return is_solved
 
-    # Prints the sudoku puzzle
+    # Prints the solution of the sudoku puzzle
     def sudoku_output(self, values):
-        print("SUDOKU:")
-        line = ""
-        sum = 0
-        domain = ""
 
-        for var in self.elements:
+        print("Solution:")
+        thread = ""
+        a = ""
+        sum = 0
+
+        for x in self.elements:
             #if len(values[var]) > 1:
             #    domain += '0'
             #if values != False:
             #else:
             if values != False:
-                domain += str(values[var])
+                a += str(values[x])
 
         for i in range(9):
+
             if (i % 3 == 0):
                 print("{:-^12s}".format(HOR_DELIMITER))
 
             for j in range(9):
-                if (j % 3) == 0:
-                    line += VER_DELIMITER
 
-                line += domain[sum]
+                if (j % 3) == 0:
+                    thread += VER_DELIMITER
+
+                thread += a[sum]
                 sum += 1
 
-            print(line + VER_DELIMITER)
-            line = ''
+            print(thread + VER_DELIMITER)
+            thread = ''
+            
         print("{:-^12s}".format(HOR_DELIMITER))
 
-    # Checks arc consistency, compares to see if value is already in the constraint
-    def arc_consistent(self, assignment, var, val):
-        for neighbor in self.neighbors[var]:
-            if neighbor in assignment.keys() and assignment[neighbor] == val:
-                return False
+    # Checks arc consistency to make sure it's maintained
+    def constraint_consistency(self, task, ele, res):
 
-        return True
+        consistent = True
+
+        for n in self.adjacent[ele]:
+
+            if n in task.keys() and task[n] == res:
+                consistent = False
+        
+        return consistent
