@@ -123,5 +123,4 @@ if AC_3(csp1):
 
         else:
             csp1.sudoku_output(sudoku)
-
 fp1.close()
