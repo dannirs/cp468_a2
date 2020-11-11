@@ -23,7 +23,7 @@ class CSP:
             for column in NUMS:
                 self.elements.append(row + column)
 
-        self.domain = dict(
+        self.zone = dict(
             (self.elements[i], NUMS if filename[i] == '0' else filename[i]) for i in range(len(filename)))
 
         # Storing the column constraints into x
@@ -106,7 +106,7 @@ class CSP:
     def check_solve(self):
         is_solved = True
         for ele in self.elements:
-            if len(self.domain[ele]) > 1:
+            if len(self.zone[ele]) > 1:
                 is_solved = False
                 break
         return is_solved

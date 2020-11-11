@@ -1,9 +1,9 @@
 import queue
 import copy
 from csp import *
-# ac-3 algorithm
 
 
+#AC-3 algorithm 
 def AC_3(constraints):
     flag = False
 
@@ -18,11 +18,11 @@ def AC_3(constraints):
     while queue_arcs.empty() != flag:
         (x, y) = queue_arcs.get()
 
-        # check arc-consistency using the Revise() function, to see for all values Xi, there's a value we can use in Xj
+        # Checks arc consistency, if it's not maintained then the domain is changed
         if domain_change(constraints, x, y):
 
-            # if length of the domain is 0, there's no arc-consistency so return false
-            if len(constraints.domain[x]) == 0:
+            # If length of the domain is 0, there's no arc-consistency so return false
+            if len(constraints.zone[x]) == 0:
                 return flag
 
             for z in (constraints.adjacent[x] - set(y)):
@@ -32,87 +32,91 @@ def AC_3(constraints):
 
 # Checks if the value is already in the domain, and if it is, change the domain. Return true if domain was changed, false otherwise
 
-
-def domain_change(csp, Xi, Xj):
+def domain_change(constraint, x, y):
     flag = False
-    values = set(csp.domain[Xi])
+    elements = set(constraint.zone[x])
     index = 0
 
-    for x in values:
+    for i in elements:
         is_consistent = True
-        for y in csp.domain[Xj]:
-            if x != y:
-                # is_consistent checks if there is a value that is consistent with x
+        for j in constraint.zone[y]:
+            if i != j:
+                # is_consistent checks if the domain of the constraint is in the overall set
                 is_consistent = False
         if is_consistent:
-            csp.domain[Xi] = csp.domain[Xi].replace(x, '')
+            constraint.zone[x] = constraint.zone[x].replace(x, '')
             flag = True
         else:
             index += 1
 
-        # if not isConsistent(csp, x, Xi, Xj):
-        #    csp.domain[Xi] = csp.domain[Xi].replace(x, '')
-        #    revised = True
 
     return flag
-
-# def consistency_check(csp, x, Xi, Xj):
-#    for y in csp.domain[Xj]:
-#        if Xj in csp.neighbors[Xi] and y != x:
-#            return True
-#
-#    return False
 
 # uses backtracking algorithm to solve the puzzle
 
 
-def backward_track(task, csp):
-    # might need change
-    if set(task.keys()) == set(csp.elements):
+def backward_track(task, constraint):
+
+    if set(task.keys()) == set(constraint.elements):
         return task
-    var = select_unsigned_var(task, csp)
-    domain = copy.deepcopy(csp.domain)
-    for v in csp.domain[var]:
-        if csp.constraint_consistency(task, var, v):
-            task[var] = v
+    ele = next_var(task, constraint)
+    zone = copy.deepcopy(constraint.zone)
+    for e in constraint.zone[ele]:
+
+        if constraint.constraint_consistency(task, ele, e):
+
+            task[ele] = e
             inferences = {}
-            inferences = infer(task, inferences, csp, var, v)
+            inferences = helper_maintain(task, inferences, constraint, ele, e)
 
         if inferences != False:
-            result = backward_track(task, csp)
+            result = backward_track(task, constraint)
 
             if result != False:
                 return result
 
-        csp.domain.update(domain)
+        constraint.zone.update(zone)
 
     return False
 
+#Decides which variable to give an assignment next
+def next_var(task, constraint):
 
-def select_unsigned_var(assignment, csp):
-    unassigned_vars = dict((Variables, len(
-        csp.domain[Variables])) for Variables in csp.domain if Variables not in assignment.keys())
-    return min(unassigned_vars, key=unassigned_vars.get)
+    next_var = dict((Variables, len(
+        constraint.zone[Variables])) for Variables in constraint.zone if Variables not in task.keys())
+        
+    return min(next_var, key=next_var.get)
 
+# Helper function that maintains csp.  
+# Value is taken from domain 
+# important so that deduction can be reversed if there's partial assignment.
+def helper_maintain(task, i, constraint, r, ele):
 
-def infer(assignment, inferences, csp, var, val):
-    inferences[var] = val
-    for neighbor in csp.adjacent[var]:
-        if neighbor not in assignment and val in csp.domain[neighbor]:
-            if len(csp.domain[neighbor]) == 1:
+    
+    i[r] = ele
+    for adjacent in constraint.adjacent[r]:
+
+        if adjacent not in task and ele in constraint.zone[adjacent]:
+
+            if len(constraint.zone[adjacent]) == 1:
+
                 return False
 
-            remaining = csp.domain[neighbor] = csp.domain[neighbor].replace(
-                val, "")
 
-            if len(remaining) == 1:
-                flag = infer(assignment, inferences,
-                             csp, neighbor, remaining)
+            leftover = constraint.zone[adjacent] = constraint.zone[adjacent].replace(
+                ele, "")
 
-                if flag == False:
+
+            if len(leftover) == 1:
+
+                turn = helper_maintain(task, i,
+                             constraint, adjacent, leftover)
+
+                if turn == False:
+                    
                     return False
 
-    return inferences
+    return i
 
 
 def file_to_string(fp):

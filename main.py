@@ -24,7 +24,7 @@ csp1 = CSP(sudoku_string1)
 if AC_3(csp1):
     if csp1.check_solve():
         print("----Solve SUDOKU WITH AC3----")
-        csp1.sudoku_output(csp1.domain)
+        csp1.sudoku_output(csp1.zone)
 
     else:
         print("----Solve SUDOKU WITH BACKTRACKING----")
@@ -45,7 +45,7 @@ csp2 = CSP(sudoku_string2)
 if AC_3(csp2):
     if csp2.check_solve():
         print("----Solve SUDOKU WITH AC3----")
-        csp2.sudoku_output(csp2.domain)
+        csp2.sudoku_output(csp2.zone)
 
     else:
         print("----Solve SUDOKU WITH BACKTRACKING----")
