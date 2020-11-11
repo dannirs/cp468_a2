@@ -2,7 +2,6 @@ import queue
 import copy
 from csp import *
 
-
 #AC-3 algorithm 
 def AC_3(constraints):
     
@@ -37,7 +36,6 @@ def AC_3(constraints):
     return flag
 
 # Checks if the value is already in the domain, and if it is, change the domain. Return true if domain was changed, false otherwise
-
 def domain_change(constraint, x, y):
     flag = False
     elements = set(constraint.zone[x])
@@ -59,8 +57,6 @@ def domain_change(constraint, x, y):
     return flag
 
 # uses backtracking algorithm to solve the puzzle
-
-
 def backward_track(task, constraint):
 
     if set(task.keys()) == set(constraint.elements):
@@ -85,7 +81,7 @@ def backward_track(task, constraint):
 
     return False
 
-#Decides which variable to give an assignment next
+#Decides which variable to give an assignment next (minimum remaining value heuristic) 
 def next_var(task, constraint):
 
     next_var = dict((Variables, len(
@@ -98,7 +94,6 @@ def next_var(task, constraint):
 # important so that deduction can be reversed if there's partial assignment.
 def helper_maintain(task, i, constraint, r, ele):
 
-    
     i[r] = ele
     for adjacent in constraint.adjacent[r]:
 
